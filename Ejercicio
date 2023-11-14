@@ -1,0 +1,178 @@
+CREATE DATABASE BANCOS;
+
+USE BANCOS;
+
+CREATE TABLE CLIENTES 
+    ( 
+     cedula VARCHAR (15)  NOT NULL , 
+     nombre VARCHAR (30)  NOT NULL , 
+     ciudad VARCHAR (30)  NOT NULL , 
+     telefono VARCHAR (15)  NOT NULL 
+    );
+
+
+
+ALTER TABLE CLIENTES 
+    ADD CONSTRAINT CLIENTE_PK PRIMARY KEY (cedula ) ;
+
+
+CREATE TABLE CLI_CUENTAS 
+    ( 
+     ced_cliente VARCHAR (15)  NOT NULL , 
+     nro_cuenta INTEGER  NOT NULL 
+    );
+
+
+
+ALTER TABLE CLI_CUENTAS 
+    ADD CONSTRAINT CLI_CUENTA_PK PRIMARY KEY ( nro_cuenta, ced_cliente ) ;
+
+
+CREATE TABLE CLI_PRESTAMOS 
+    ( 
+     ced_cliente VARCHAR (15)  NOT NULL , 
+     nro_prestamo INTEGER  NOT NULL 
+    );
+
+
+
+ALTER TABLE CLI_PRESTAMOS 
+    ADD CONSTRAINT CLI_PRES_PK PRIMARY KEY ( ced_cliente, nro_prestamo ) ;
+
+
+CREATE TABLE CUENTAS 
+    ( 
+     nro_cuenta INTEGER  NOT NULL , 
+     saldo REAL  NOT NULL , 
+     cod_suc INTEGER  NOT NULL 
+    );
+
+
+
+ALTER TABLE CUENTAS 
+    ADD CONSTRAINT CUENTA_PK PRIMARY KEY ( nro_cuenta ) ;
+
+
+CREATE TABLE PRESTAMOS 
+    ( 
+     nro_prestamo INTEGER  NOT NULL , 
+     valor REAL  NOT NULL , 
+     saldo REAL  NOT NULL , 
+     cod_suc INTEGER  NOT NULL 
+    );
+
+ALTER TABLE PRESTAMOS 
+    ADD CONSTRAINT PRESTAMO_PK PRIMARY KEY ( nro_prestamo ) ;
+
+
+CREATE TABLE SUCURSALES 
+    ( 
+     codigo INTEGER  NOT NULL , 
+     nombre VARCHAR (30)  NOT NULL , 
+     ciudad VARCHAR (30)  NOT NULL , 
+     activo REAL  NOT NULL 
+    );
+
+
+
+ALTER TABLE SUCURSALES 
+    ADD CONSTRAINT SUCURSAL_PK PRIMARY KEY ( codigo ) ;
+
+
+
+ALTER TABLE CLI_CUENTAS 
+    ADD CONSTRAINT CLI_CUENTA_CLIENTE_FK FOREIGN KEY(ced_cliente) 
+    REFERENCES CLIENTES (cedula);
+
+
+ALTER TABLE CLI_CUENTAS 
+    ADD CONSTRAINT CLI_CUENTA_CUENTA_FK FOREIGN KEY(nro_cuenta) 
+    REFERENCES CUENTAS (nro_cuenta);
+
+
+ALTER TABLE CLI_PRESTAMOS 
+    ADD CONSTRAINT CLI_PRES_CLIENTE_FK FOREIGN KEY (ced_cliente) 
+    REFERENCES CLIENTES(cedula);
+
+
+ALTER TABLE CLI_PRESTAMOS 
+    ADD CONSTRAINT CLI_PRES_PRESTAMO_FK FOREIGN KEY(nro_prestamo) 
+    REFERENCES PRESTAMOS (nro_prestamo);
+
+ALTER TABLE CUENTAS 
+    ADD CONSTRAINT CUENTA_SUCURSAL_FK FOREIGN KEY(cod_suc) 
+    REFERENCES SUCURSALES (codigo);
+
+ALTER TABLE PRESTAMOS 
+    ADD CONSTRAINT PRESTAMO_SUCURSAL_FK FOREIGN KEY(cod_suc)
+    REFERENCES SUCURSALES(codigo);
+
+CREATE TABLE EMPLEADOS(
+	id_empleado INT PRIMARY KEY NOT NULL,
+    nombre VARCHAR(20),
+    apellido VARCHAR(20),
+    fecha_nacimiento DATE,
+    puesto VARCHAR(20),
+    salario INT,
+    id_sucursal INT NOT NULL,
+    CONSTRAINT EMPLEADOS_SUCURSAL_FK FOREIGN KEY(id_sucursal)
+    REFERENCES SUCURSALES(codigo)
+);
+
+INSERT INTO clientes  VALUES (67, 'Monica Rojas', 'Medellin','123');
+INSERT INTO clientes  VALUES (71, 'Francisco Sanchez', 'Cali','567');
+INSERT INTO clientes  VALUES (78, 'Andres Castellanos', 'Medellin','568');
+
+
+INSERT INTO sucursales VALUES (10, 'Poblado', 'Medellin',100000);
+INSERT INTO sucursales VALUES (20, 'San Diego', 'Medellin',100000);
+INSERT INTO sucursales VALUES (30, 'Exito', 'Medellin',100000);
+INSERT INTO sucursales VALUES (40, 'Parque', 'Envigado',500000);
+INSERT INTO sucursales VALUES (50, 'Exito', 'Envigado',1000000);
+INSERT INTO sucursales VALUES (60, 'Exito', 'Bogota',200000);
+INSERT INTO sucursales VALUES (70, 'Centro', 'Bogota',500000);
+
+INSERT INTO cuentas VALUES (1, 10000, 10);
+INSERT INTO cuentas VALUES (2, 10000, 20);
+INSERT INTO cuentas VALUES (3, 10000, 20);
+INSERT INTO cuentas VALUES (4, 10000, 40);
+INSERT INTO cuentas VALUES (5, 10000, 50);
+INSERT INTO cuentas VALUES (6, 10000, 10);
+INSERT INTO cuentas VALUES (7, 10000, 10);
+
+
+INSERT INTO cli_cuentas VALUES (71,1);
+INSERT INTO cli_cuentas VALUES (67,2);
+INSERT INTO cli_cuentas VALUES (71,3);
+INSERT INTO cli_cuentas VALUES (67,4);
+INSERT INTO cli_cuentas VALUES (67,6);
+INSERT INTO cli_cuentas VALUES (67,7);
+INSERT INTO cli_cuentas VALUES (78,7);
+
+INSERT INTO prestamos VALUES (11, 10000, 3000,30);
+INSERT INTO prestamos VALUES (22, 100000, 30000,10);
+INSERT INTO prestamos VALUES (33, 100000, 30000,40);
+
+INSERT INTO cli_prestamos VALUES (78,11);
+INSERT INTO cli_prestamos VALUES (71,22);
+INSERT INTO cli_prestamos VALUES (78,22);
+INSERT INTO cli_prestamos VALUES (78,33);
+
+INSERT INTO clientes VALUES (83, 'Juan Lopez', 'Mixco', '765');
+INSERT INTO clientes VALUES (98, 'Hugo Juarez', 'San Lucas', '653');
+
+INSERT INTO cuentas VALUES (17, 20000, 40);
+INSERT INTO cuentas VALUES (44, 30000, 40);
+INSERT INTO cuentas VALUES (80, 40000, 70);
+INSERT INTO cuentas VALUES (22, 50000, 70);
+
+INSERT INTO cli_cuentas VALUES (83, 17);
+INSERT INTO cli_cuentas VALUES (83, 44);
+INSERT INTO cli_cuentas VALUES (98, 80);
+INSERT INTO cli_cuentas VALUES (98, 22);
+
+INSERT INTO prestamos VALUES (34, 50000, 25000, 40);
+INSERT INTO prestamos VALUES (43, 10000, 250, 70);
+
+INSERT INTO cli_prestamos VALUES (83, 34);
+INSERT INTO cli_prestamos VALUES (98, 43);
